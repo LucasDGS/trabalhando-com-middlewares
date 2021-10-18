@@ -38,10 +38,11 @@ function checksTodoExists(request, response, next) {
   const { username } = request.headers;
   const { id } = request.params;
 
-  const regexExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
-  
-  if(!regexExp.test(id)){
-    return response.status(400).json({error: "Id isn't a uuid"})
+  const regexExp =
+    /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+
+  if (!regexExp.test(id)) {
+    return response.status(400).json({ error: "Id isn't a uuid" });
   }
 
   const user = users.find((user) => user.username === username);
@@ -50,15 +51,15 @@ function checksTodoExists(request, response, next) {
   }
 
   const todo = user.todos.find((todo) => todo.id === id);
-  if (!todo){
-    return response.status(404).json({ error: "Id todo doens't match with user" });
+  if (!todo) {
+    return response
+      .status(404)
+      .json({ error: "Id todo doens't match with user" });
   }
-  
-  if (user && todo) {
-    request.todo = todo;
-    request.user = user;
-    next();
-  }
+
+  request.todo = todo;
+  request.user = user;
+  next();
 }
 
 function findUserById(request, response, next) {
